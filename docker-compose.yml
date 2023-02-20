@@ -1,0 +1,200 @@
+version: "3.7"
+
+services:
+  api-gateway:
+    hostname: api-gateway
+    build:
+      context: api-gateway
+      args:
+        APP_ENV: development
+    image: fiuber.api-gateway:dev
+    container_name: fiuber.api-gateway.dev
+    volumes:
+      - ./api-gateway/src:/opt/app/src
+      - ./api-gateway/test:/opt/app/test
+      - ./api-gateway/.vscode:/opt/app/.vscode
+    environment:
+      - HOST=${API_GATEWAY_HOST}
+      - PORT=${API_GATEWAY_PORT}
+      - NODE_ENV=development
+      - SERVICE_USERS_URL=http://${API_GATEWAY_SERVICE_USERS_HOST}:${SERVICE_USERS_PORT}${SERVICE_USERS_API_VERSION_PREFIX}
+      - SERVICE_TRIPS_URL=http://${API_GATEWAY_SERVICE_TRIPS_HOST}:${SERVICE_TRIPS_PORT}${SERVICE_TRIPS_API_VERSION_PREFIX}
+      - SERVICE_PRICING_URL=http://${API_GATEWAY_SERVICE_PRICING_HOST}:${SERVICE_PRICING_PORT}${SERVICE_PRICING_API_VERSION_PREFIX}
+      - SERVICE_PAYMENTS_URL=http://${API_GATEWAY_SERVICE_PAYMENTS_HOST}:${SERVICE_PAYMENTS_PORT}${SERVICE_PAYMENTS_API_VERSION_PREFIX}
+      - DATABASE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${DATABASE_NAME}
+      - FB_TYPE=${FB_TYPE}
+      - FB_PROJECT_ID=${FB_PROJECT_ID}
+      - FB_PRIVATE_KEY_ID=${FB_PRIVATE_KEY_ID}
+      - FB_PRIVATE_KEY=${FB_PRIVATE_KEY}
+      - FB_CLIENT_EMAIL=${FB_CLIENT_EMAIL}
+      - FB_CLIENT_ID=${FB_CLIENT_ID} 
+      - FB_AUTH_URI=${FB_AUTH_URI}
+      - FB_TOKEN_URI=${FB_TOKEN_URI}
+      - FB_AUTH_PROVIDER_CERT_URL=${FB_AUTH_PROVIDER_CERT_URL}
+      - FB_CLIENT_CERT_URL=${FB_CLIENT_CERT_URL}
+    networks:
+      - fiuber
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - service-users
+    command: "bash -c 'npm run dev-start'"
+    
+  service-users:
+    hostname: service-users
+    build:
+      context: service-users
+      args:
+        APP_ENV: development
+    image: fiuber.service-users:dev
+    container_name: fiuber.service-users.dev
+    volumes:
+      - ./service-users/src:/opt/app/src
+      - ./service-users/test:/opt/app/test
+      - ./service-users/alembic:/opt/app/alembic
+      - ./service-users/.vscode:/opt/app/.vscode
+    environment:
+      - SERVICE_USERS_HOST=${SERVICE_USERS_HOST}
+      - SERVICE_USERS_PORT=${SERVICE_USERS_PORT}
+      - API_VERSION_PREFIX=${SERVICE_USERS_API_VERSION_PREFIX}
+      - DATABASE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${DATABASE_NAME}
+      - MONGO_ATLAS=${MONGO_ATLAS}
+      - MONGO_LOCAL=${MONGO_LOCAL}
+      - MONGO_CONNECTION=${MONGO_CONNECTION}
+    networks:
+      - fiuber
+    ports:
+      - "${SERVICE_USERS_PORT}:${SERVICE_USERS_PORT}"
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    depends_on:
+      - dev-db
+      - mongodb
+    command: "bash -c 'sleep 5 && alembic upgrade head && python3 -m uvicorn src.webapi.main:app --host=$${SERVICE_USERS_HOST} --port=$${SERVICE_USERS_PORT} --reload'"
+  
+  service-trips:
+    hostname: service-trips
+    build:
+      context: service-trips
+      args:
+        APP_ENV: development
+    image: fiuber.service-trips:dev
+    container_name: fiuber.service-trips.dev
+    volumes:
+      - ./service-trips/src:/opt/app/src
+      - ./service-trips/test:/opt/app/test
+      - ./service-trips/.vscode:/opt/app/.vscode
+    environment:
+      - SERVICE_TRIPS_HOST=${SERVICE_TRIPS_HOST}
+      - SERVICE_TRIPS_PORT=${SERVICE_TRIPS_PORT}
+      - API_VERSION_PREFIX=${SERVICE_TRIPS_API_VERSION_PREFIX}
+      - DATABASE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${DATABASE_NAME}
+      - APP_ENV=${SERVICE_TRIPS_APP_ENV}
+      - GEOCODING_API_KEY=${GEOCODING_API_KEY}
+      - PRICING_SERVICE_REMOTE_URL=http://${API_GATEWAY_SERVICE_PRICING_HOST}:${SERVICE_PRICING_PORT}${SERVICE_PRICING_API_VERSION_PREFIX}
+      - MONGO_ATLAS_TR=${MONGO_ATLAS_TR}
+      - MONGO_CONNECTION=${MONGO_CONNECTION}
+      - TRIPS_SERVICE_USERS_URL=http://${TRIPS_SERVICE_USERS_HOST}:${SERVICE_USERS_PORT}${SERVICE_USERS_API_VERSION_PREFIX}
+    networks:
+      - fiuber
+    ports:
+      - "${SERVICE_TRIPS_PORT}:${SERVICE_TRIPS_PORT}"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dev-db
+    command: "bash -c 'python3 -m uvicorn src.webapi.main:app --host=$${SERVICE_TRIPS_HOST} --port=$${SERVICE_TRIPS_PORT} --reload'"
+
+  service-pricing:
+    hostname: service-pricing
+    build:
+      context: service-pricing
+      args:
+        APP_ENV: development
+    image: fiuber.service-pricing:dev
+    container_name: fiuber.service-pricing.dev
+    volumes:
+      - ./service-pricing/src:/opt/app/src
+      - ./service-pricing/test:/opt/app/test
+      - ./service-pricing/.vscode:/opt/app/.vscode
+    environment:
+      - SERVICE_PRICING_HOST=${SERVICE_PRICING_HOST}
+      - SERVICE_PRICING_PORT=${SERVICE_PRICING_PORT}
+      - API_VERSION_PREFIX=${SERVICE_PRICING_API_VERSION_PREFIX}
+      - DATABASE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${DATABASE_NAME}
+      - APP_ENV=${SERVICE_PRICING_APP_ENV}
+      - PRICING_SERVICE_USERS_URL=http://${PRICING_SERVICE_USERS_HOST}:${SERVICE_USERS_PORT}${SERVICE_USERS_API_VERSION_PREFIX}
+      - PRICING_SERVICE_TRIPS_URL=http://${PRICING_SERVICE_TRIPS_HOST}:${SERVICE_TRIPS_PORT}${SERVICE_TRIPS_API_VERSION_PREFIX}
+    networks:
+      - fiuber
+    ports:
+      - "${SERVICE_PRICING_PORT}:${SERVICE_PRICING_PORT}"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dev-db
+    command: "bash -c 'python3 -m uvicorn src.webapi.main:app --host=$${SERVICE_PRICING_HOST} --port=$${SERVICE_PRICING_PORT} --reload'"
+    
+  dev-db:
+    image: postgres:14.5-bullseye
+    container_name: fiuber-postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - PGPORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${DATABASE_NAME}
+    networks:
+      - fiuber
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    # volumes:
+    #  - /mnt/ramdisk:/var/lib/postgresql/data
+
+  service-payments:
+    hostname: service-payments
+    build:
+      context: service-payments
+      args:
+        APP_ENV: development
+    image: fiuber.service-payments:dev
+    container_name: fiuber.service-payments.dev
+    volumes:
+      - ./service-payments/src:/opt/app/src
+      - ./service-payments/test:/opt/app/test
+      - ./service-payments/.vscode:/opt/app/.vscode
+    environment:
+      - SERVICE_PAYMENTS_HOST=${SERVICE_PAYMENTS_HOST}
+      - SERVICE_PAYMENTS_PORT=${SERVICE_PAYMENTS_PORT}
+      - NODE_ENV=development
+      - ALCHEMY_API_KEY=${ALCHEMY_API_KEY}
+      - MNEMONIC=${MNEMONIC}
+      - MONGO_ATLAS_PAYMENTS=${MONGO_ATLAS_PAYMENTS}
+      - MONGO_CONNECTION=${MONGO_CONNECTION}
+    networks:
+      - fiuber
+    ports:
+      - "${SERVICE_PAYMENTS_PORT}:${SERVICE_PAYMENTS_PORT}"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - mongodb
+    command: "bash -c 'npm run dev-start'"
+
+  mongodb:
+    image: mongo:4.0
+    restart: always
+    container_name: mongodb
+    networks:
+      - fiuber
+    ports:
+    - 27017:27017
+    volumes:
+    - ./mongodb/data:/data/db
+
+networks:
+  fiuber:
+    driver: bridge
+    name: fiuber

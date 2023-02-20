@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture &mdash; FI-UBER 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> FI-UBER
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#microservices">Microservices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-gateway">API Gateway</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#users">Users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trips">Trips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pricing">Pricing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#payments">Payments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devops.html">DevOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_experience.html">Developer Experience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tech_stack.html">Tech Stack</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FI-UBER</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/architecture.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading"></a></h1>
+<p>Here we give a brief description of the underlying infrastructure of the
+application. Five microservices were implemented, one of them being the
+API Gateway.</p>
+<section id="microservices">
+<h2>Microservices<a class="headerlink" href="#microservices" title="Permalink to this heading"></a></h2>
+<section id="api-gateway">
+<h3>API Gateway<a class="headerlink" href="#api-gateway" title="Permalink to this heading"></a></h3>
+<p>In the API Gateway, all microservices are coordinated to provide a single access
+to the application. Users and admins consume the Gateway’s API using the mobile
+app and the backoffice.</p>
+<p>Having a gateway opens the possibility of replicating multiple instances for
+load balancing (<em>stateless</em> is key here). Besides, the average <em>round trip
+time</em> can be significantly reduced.</p>
+</section>
+<section id="users">
+<h3>Users<a class="headerlink" href="#users" title="Permalink to this heading"></a></h3>
+<p>All users, be admins, drivers or riders, are managed here. Data such as:</p>
+<ul class="simple">
+<li><p>Usernames</p></li>
+<li><p>Preferred location addresses</p></li>
+<li><p>Car manufacturers, colors and models</p></li>
+</ul>
+<p>is stored using a relational database.</p>
+</section>
+<section id="trips">
+<h3>Trips<a class="headerlink" href="#trips" title="Permalink to this heading"></a></h3>
+<p>Here we orchestrate trips between drivers and riders. A rider requests a trip, and
+a driver takes it. Real time information such as driver’s current location and trip
+state is provided to ensure a seamless user experience.</p>
+<p>Other functionality related to trips, for example <em>geocoding</em>, is handled here.
+What’s more, the <em>polylines</em> to be drawn both in the rider and the driver’s map
+is generated in this microservice.</p>
+</section>
+<section id="pricing">
+<h3>Pricing<a class="headerlink" href="#pricing" title="Permalink to this heading"></a></h3>
+<p>Trip prices are calculated using a set of configurable rules. These rules can also
+be evaluated before activation. Currently, 4 parameters are taken into account:</p>
+<ul class="simple">
+<li><p>Total trip distance</p></li>
+<li><p>Trip time</p></li>
+<li><p>The driver’s rating</p></li>
+<li><p>The completed trips in the last 30 minutes for the driver</p></li>
+</ul>
+<p>For price estimation, the las two metrics are considered to be 3.5 stars and 0
+respectively.</p>
+</section>
+<section id="payments">
+<h3>Payments<a class="headerlink" href="#payments" title="Permalink to this heading"></a></h3>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mateo Calvo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

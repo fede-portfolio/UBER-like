@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Experience &mdash; FI-UBER 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tech Stack" href="tech_stack.html" />
+    <link rel="prev" title="DevOps" href="devops.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> FI-UBER
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devops.html">DevOps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Experience</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-local-environment">Setting Up Local Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#suggested-tools">Suggested Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ide-visual-studio-code">IDE: Visual Studio Code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shell-output-formatting-colout">Shell output formatting: colout</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#local-log-monitoring">Local Log Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-cpu-usage">Memory &amp; CPU Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#developing-inside-docker-containers">Developing Inside Docker Containers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tech_stack.html">Tech Stack</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FI-UBER</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Developer Experience</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/developer_experience.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-experience">
+<h1>Developer Experience<a class="headerlink" href="#developer-experience" title="Permalink to this heading"></a></h1>
+<p>In this section we give a description of the typical developer workflow, the suggested tools,
+and some useful commands.</p>
+<section id="setting-up-local-environment">
+<h2>Setting Up Local Environment<a class="headerlink" href="#setting-up-local-environment" title="Permalink to this heading"></a></h2>
+<section id="suggested-tools">
+<h3>Suggested Tools<a class="headerlink" href="#suggested-tools" title="Permalink to this heading"></a></h3>
+<section id="ide-visual-studio-code">
+<h4>IDE: Visual Studio Code<a class="headerlink" href="#ide-visual-studio-code" title="Permalink to this heading"></a></h4>
+<p><strong>Website</strong>: <a class="reference external" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
+<p>Alongside Intellisense and debugging utilities, some extensions made
+developing easier:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Dev Containers</a>: enables working without installing a single dependency in the developer’s computer</p></li>
+<li><p><a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=johnpapa.vscode-peacock">Peacock</a>: allows theming each VSCode workspace with a custom color.</p></li>
+<li><p><a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree">Todo Tree</a>: provides hihglighting for <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> and <code class="docutils literal notranslate"><span class="pre">FIXMEs</span></code></p></li>
+</ul>
+</section>
+<section id="shell-output-formatting-colout">
+<h4>Shell output formatting: colout<a class="headerlink" href="#shell-output-formatting-colout" title="Permalink to this heading"></a></h4>
+<p><strong>Website</strong>: <a class="reference external" href="https://nojhan.github.io/colout/">https://nojhan.github.io/colout/</a></p>
+<p>This tool allows coloring output with pattern matching. Having a certain color assigned to each
+microservice allowed us to quickly find logs and the corresponding IDE window.</p>
+</section>
+</section>
+<section id="local-log-monitoring">
+<h3>Local Log Monitoring<a class="headerlink" href="#local-log-monitoring" title="Permalink to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker compose up <span class="p">|</span> colout <span class="s2">&quot;fiuber.api-gateway.dev&quot;</span> yellow <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-trips.dev&quot;</span> blue <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-users.dev&quot;</span> green <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-pricing.dev&quot;</span> purple <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-payments.dev&quot;</span> red
+</pre></div>
+</div>
+<a class="with-shadow reference internal image-reference" href="_images/compose_terminal.png"><img alt="_images/compose_terminal.png" class="with-shadow" src="_images/compose_terminal.png" style="width: 887.9px; height: 478.40000000000003px;" /></a>
+<p>Some text …  (will be displayed on the right of the image)</p>
+</section>
+<section id="memory-cpu-usage">
+<h3>Memory &amp; CPU Usage<a class="headerlink" href="#memory-cpu-usage" title="Permalink to this heading"></a></h3>
+<p>The following code snippet can be used to monitor resource usage in each container:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker stats --format <span class="s2">&quot;table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}&quot;</span> <span class="p">|</span> colout <span class="s2">&quot;fiuber.api-gateway.dev&quot;</span> yellow <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-trips.dev&quot;</span> blue <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-users.dev&quot;</span> green <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-pricing.dev&quot;</span> purple <span class="p">|</span> colout <span class="s2">&quot;fiuber.service-payments.dev&quot;</span> red
+</pre></div>
+</div>
+<a class="with-shadow reference internal image-reference" href="_images/docker_stats.png"><img alt="Left floating image" class="with-shadow" src="_images/docker_stats.png" style="width: 356.2px; height: 346.45px;" /></a>
+</section>
+</section>
+<section class="clear-both" id="developing-inside-docker-containers">
+<h2>Developing Inside Docker Containers<a class="headerlink" href="#developing-inside-docker-containers" title="Permalink to this heading"></a></h2>
+<p>Using the suggested VSCode extensions enables linting, debugging, troubleshooting and Intellisense
+inside each container, as seen in the video below:</p>
+
+    <video width="500" height="300" controls >
+    <source src="./_videos/attach_vscode.mp4" type="video/mp4">
+    Video
+    </video>
+    </section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="devops.html" class="btn btn-neutral float-left" title="DevOps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tech_stack.html" class="btn btn-neutral float-right" title="Tech Stack" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mateo Calvo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

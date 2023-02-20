@@ -1,0 +1,36 @@
+name: Lint and Deploy
+
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
+
+jobs:
+  run_eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install dependencies
+        run: |
+          npm install --save-dev
+      - name: run linter
+        run: |
+          npx eslint src/** test/**
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ contains(join(needs.*.result, ','), 'success') }}
+    needs: [run_eslint]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          docker_heroku_process_type: web
+          branch: main

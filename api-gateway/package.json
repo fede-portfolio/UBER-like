@@ -1,0 +1,33 @@
+{
+  "name": "api-gateway",
+  "version": "0.1.0",
+  "description": "api-gateway",
+  "main": "src/server.mjs",
+  "scripts": {
+    "start": "node ./src/server",
+    "dev-start": "nodemon ./src/main",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cucumber": "./node_modules/.bin/cucumber-js ./test --tags 'not @wip' -f @cucumber/pretty-formatter",
+    "cucumber-now": "./node_modules/.bin/cucumber-js ./test --tags '@now' -f @cucumber/pretty-formatter"
+  },
+  "keywords": [],
+  "author": "Mateo Calvo",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/swagger": "^7.6.1",
+    "axios": "^0.27.2",
+    "fastify": "^4.8.1",
+    "fastify-plugin": "^4.2.1",
+    "firebase-admin": "^10.0.0"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^8.6.0",
+    "@cucumber/pretty-formatter": "^1.0.0",
+    "eslint": "^8.27.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0",
+    "tap": "^16.3.0"
+  }
+}
